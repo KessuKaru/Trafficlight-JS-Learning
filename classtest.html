@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Class Test</title>
+  </head>
+  <body>
+
+    <script>
+
+        let Person1 = {
+            name: 'Mia',
+            height: 1.70,
+            tellMyName: function () {
+               console.log(this.name)
+            }
+        }
+
+        // console.log(Person1.name + ', ' + Person1.height)
+
+        function Person(name, height) {
+            let _name = name;
+            let _height = height;
+
+            this.tellMyName = function () {
+               console.log("My name is: " + _name)
+            }
+            this.changeName = function (newName) {
+                _name = newName
+            }
+        }
+
+
+
+
+
+
+        var person2 = new Person("Esteban", 1.80)
+        var person3 = new Person("Sara", 1.65)
+
+        person2.tellMyName()
+        person2.changeName("Esteban Wooka")
+        person2.tellMyName()
+        person3.tellMyName()
+
+    </script>   
+  </body>
+</html>
