@@ -7,25 +7,25 @@
     <title>Traffic Light</title>
 
     <link rel="stylesheet" href="style.css">
-
-
   </head>
   <body>
     <h1>Hello cars!</h1>
     <p>Let's have a traffic light!</p>
 
 
-    <div class="ampel" id="ampelOne"> 
+    <!-- <div class="ampel" id="ampelOne"> 
       <span class="light" id="redlight"></span>
       <span class="light" id="yellowlight"></span>
       <span class="light" id="greenlight"></span>
-    </div>
+    </div> -->
 
-    <div class="ampel" id="ampelTwo">
-      <span class="light" id="ampelTwoRedlight"></span>
-      <span class="light" id="yellowlight"></span>
-      <span class="light" id="greenlight"></span>
-    </div>
+    <!-- <button style="margin-bottom: 10px" onclick="new TrafficLight('container').run()">Click me!</button> -->
+
+    <div id="container"></div>
+
+    <traffic-light></traffic-light>
+    <traffic-light></traffic-light>
+    <traffic-light></traffic-light>
 
 
     <script src="script.js"></script>   
