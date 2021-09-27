@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test for JS DOM manipulation</title>
+  </head>
+  <body>
+    <h1 style="color: rgb(115, 139, 115)">Test thingy!</h1>
+
+    <red-thing></red-thing>
+
+    <script>
+      class RedThingy extends HTMLElement {
+        constructor() {
+          super();
+          const shadow = this.attachShadow({mode: 'open'});
+
+          const ourParagraph = document.createElement("p");
+          ourParagraph.innerText = "Red cat jumped over the red dog that jumped over the red rainbow.";
+          
+          const style = document.createElement("style");
+
+          style.textContent = `
+          p {
+            background-color: black;
+            color: red;
+            font-family: monospace;
+      
+          }
+          `
+          shadow.append(style, ourParagraph);
+        }  
+      }
+
+      customElements.define("red-thing", RedThingy);
+
+    </script>
+  </body>
+</html>
+
