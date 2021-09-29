@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>State machine test</title>
+  </head>
+  <body>
+    <script>
+      // States
+      const States = {
+        VALUE1: "1",
+        VALUE5: "5",
+        VALUE6: "6",
+      };
+
+      // State Variable
+      let state = States.VALUE1;
+
+      // Outputs
+      let output = 0;
+
+      // Inputs
+      const Input = {
+        Signal1: "1",
+        Signal2: "2",
+        None: ""
+      };
+
+      // Input Signal
+      let input;
+
+      // State Machine
+
+      setInterval(function () {
+        switch (state) {
+          case States.VALUE1:
+            output = 1;
+
+            if (input == Input.Signal1) {
+              state = States.VALUE5;
+            } else if (input == Input.Signal2) {
+              state = States.VALUE6;
+            }
+            break;
+
+          case States.VALUE5:
+            output = 5;
+            if (input == Input.Signal1) {
+              state = States.VALUE6;
+            } else if (input == Input.Signal2) {
+              state = States.VALUE1;
+            }
+            break;
+
+          case States.VALUE6:
+            output = 6;
+            if (input == Input.Signal1) {
+              state = States.VALUE1;
+            } else if (input == Input.Signal2) {
+              state = States.VALUE1;
+            }
+            break;
+
+          default:
+            break;
+        }
+        
+        input = Input.None;
+
+        console.log("output: " + output);
+      }, 1000);
+
+    </script>
+  </body>
+</html>
