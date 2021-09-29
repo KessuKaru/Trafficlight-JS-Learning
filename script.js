@@ -9,12 +9,12 @@ class Light {
     parent.appendChild(this.html);
   }
 
-  swichOn() {
+  on() {
     this.currentColour = this.onColour;
     this.renderToDOM()
   }
 
-  swichOff() {
+  off() {
     this.currentColour = this.offColour;
     this.renderToDOM()
   }
@@ -30,6 +30,7 @@ class Light {
 class TrafficLight extends HTMLElement {
   constructor() {
     super();
+
     const shadow = this.attachShadow({mode: 'open'});
     
     const html = document.createElement("div");
@@ -41,6 +42,7 @@ class TrafficLight extends HTMLElement {
 
     const style = document.createElement('style');
 
+    // TODO: Move light style to lights
     style.textContent = `
     .light {
       height: 50px;
@@ -50,11 +52,7 @@ class TrafficLight extends HTMLElement {
       display: inline-block;
       margin: 5px;
     }
-    
-    /* .light#redlight {
-        background-color: red;
-      } */
-    
+
     .ampel {
       display: flex;
       flex-direction: column;
@@ -67,40 +65,74 @@ class TrafficLight extends HTMLElement {
     shadow.append(style, html);
   }
 
+  // TODO: Remove, not necessary right now
   connectedCallback() {
     this.onclick = this.run;
   }
 
   run() {
+    // TODO: Should not force switch states!
     this.enterRedState();
   }
 
+  // If in RED state, switches to redYellow state
+  // and then after timeYellow to green state.
+  switchToGreen() {
+    // If in state red:
+    // ?
+
+    // State RedYellow
+    this.redlight.on();
+    this.yellowlight.on();
+    this.greenlight.off();
+
+    // Wait for timeYellow
+    // ?
+
+    // State Green
+    this.redlight.off();
+    this.yellowlight.off();
+    this.greenlight.on();
+  }
+
+  // If in GREEN state, switches to Yellow state
+  // and then after timeYellow to green state.
+  switchToRed() {
+    
+
+    
+  }
+
+
+
+
+
   enterRedState() {
-    this.redlight.swichOn();
-    this.yellowlight.swichOff();
-    this.greenlight.swichOff();
+    this.redlight.on();
+    this.yellowlight.off();
+    this.greenlight.off();
 
     setTimeout(this.enterRedYellowState.bind(this), 5000);
   }
 
   enterRedYellowState() {
-    this.redlight.swichOn();
-    this.yellowlight.swichOn();
-    this.greenlight.swichOff();
+    this.redlight.on();
+    this.yellowlight.on();
+    this.greenlight.off();
 
     setTimeout(this.enterGreenState.bind(this), 2000);
   }
   enterGreenState() {
-    this.redlight.swichOff();
-    this.yellowlight.swichOff();
-    this.greenlight.swichOn();
+    this.redlight.off();
+    this.yellowlight.off();
+    this.greenlight.on();
 
     setTimeout(this.enterYellowState.bind(this), 5000);
   }
   enterYellowState() {
-    this.redlight.swichOff();
-    this.yellowlight.swichOn();
-    this.greenlight.swichOff();
+    this.redlight.off();
+    this.yellowlight.on();
+    this.greenlight.off();
 
     setTimeout(this.enterRedState.bind(this), 2000);
   }
