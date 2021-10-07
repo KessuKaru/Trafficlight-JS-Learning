@@ -7,71 +7,97 @@
     <title>State machine test</title>
   </head>
   <body>
+    <button id="Button1">Signal 1</button>
+    <button id="Button2">Signal 2</button>
+    <p>Output: <span id="outputValue"></span></p>
+    <p>State: <span id="state"></span></p>
+
     <script>
-      // States
-      const States = {
-        VALUE1: "1",
-        VALUE5: "5",
-        VALUE6: "6",
-      };
+      // this function will sets the output value
+      function showOutput(outputVal) {
+        document.getElementById("outputValue").innerText = outputVal;
+      }
 
-      // State Variable
-      let state = States.VALUE1;
+      function showState(stateName) {
+        document.getElementById("state").innerText = stateName;
+      }
 
-      // Outputs
-      let output = 0;
+      const inputEvent1 = "Event1";
+      const inputEvent2 = "Event2";
 
-      // Inputs
-      const Input = {
-        Signal1: "1",
-        Signal2: "2",
-        None: ""
-      };
+      const stateA = "StateA";
+      const stateB = "StateB";
+      const stateC = "StateC";
 
-      // Input Signal
+      let output;
+
       let input;
 
-      // State Machine
+      let state = "StateA";
 
-      setInterval(function () {
+      let button1 = document.getElementById("Button1");
+      let button2 = document.getElementById("Button2");
+
+      button1.onclick = function () {
+        advanceStateMachine("Event1");
+      };
+
+      button2.onclick = function () {
+        advanceStateMachine(inputEvent2);
+      };
+
+      function advanceStateMachine(input) {
+        // Get the next state from input
         switch (state) {
-          case States.VALUE1:
-            output = 1;
-
-            if (input == Input.Signal1) {
-              state = States.VALUE5;
-            } else if (input == Input.Signal2) {
-              state = States.VALUE6;
+          case "StateA":
+            if (input == "Event1") {
+              state = "StateB";
+            } else if (input == "Event2") {
+              state = "StateC";
             }
             break;
 
-          case States.VALUE5:
-            output = 5;
-            if (input == Input.Signal1) {
-              state = States.VALUE6;
-            } else if (input == Input.Signal2) {
-              state = States.VALUE1;
+          case "StateB":
+            if (input == "Event1") {
+              state = "StateC";
+            } else if (input == "Event2") {
+              state = "StateA";
             }
             break;
 
-          case States.VALUE6:
-            output = 6;
-            if (input == Input.Signal1) {
-              state = States.VALUE1;
-            } else if (input == Input.Signal2) {
-              state = States.VALUE1;
+          case "StateC":
+            if (input == "Event1") {
+              state = "StateA";
+            } else if (input == "Event2") {
+              state = "StateA";
             }
             break;
 
           default:
             break;
         }
-        
-        input = Input.None;
 
-        console.log("output: " + output);
-      }, 1000);
+        // Transition to the State (set its outputs)
+        switch (state) {
+          case "StateA":
+            output = 1;
+            break;
 
+          case "StateB":
+            output = 5;
+            break;
+
+          case "StateC":
+            output = 6;
+            break;
+
+          default:
+            break;
+        }
+        input = "NoEvent";
+        showOutput(output);
+        showState(state);
+      }
     </script>
   </body>
 </html>
