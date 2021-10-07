@@ -78,31 +78,27 @@ class TrafficLight extends HTMLElement {
   // If in RED state, switches to redYellow state
   // and then after timeYellow to green state.
   switchToGreen() {
-    // If in state red:
-    // ?
-
-    // State RedYellow
-    this.redlight.on();
-    this.yellowlight.on();
-    this.greenlight.off();
-
-    // Wait for timeYellow
-    // ?
-
-    // State Green
-    this.redlight.off();
-    this.yellowlight.off();
-    this.greenlight.on();
+ 
   }
 
   // If in GREEN state, switches to Yellow state
   // and then after timeYellow to green state.
   switchToRed() {
     
-
-    
   }
 
+  // This state machine controls the trafic light colour changes
+  advanceStatemachine(event) {
+    
+    // Handle the outputs (lights on and off) based on the state after the transition
+    // Outputs: redlight on/off, yellowlight on/off, greenlight on/off, timerTrigger, busy, enable
+    
+    // States: OFF, RED, REDYELLOW, GREEN, YELLOW, 
+    
+    // Handle the state transitions based on the input event and the current state
+    // Inputs: switchToGreen, switchToRed, timerDone, enable, disable
+
+  }
 
 
 
