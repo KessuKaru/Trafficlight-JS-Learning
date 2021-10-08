@@ -1,11 +1,11 @@
 class Light {
   constructor(colour, parent) {
-    this.offColour = 'gray';
+    this.offColour = "gray";
     this.onColour = colour;
     this.currentColour = this.offColour;
-    this.html = document.createElement('span');
+    this.html = document.createElement("span");
 
-    this.html.className = 'light';
+    this.html.className = "light";
     parent.appendChild(this.html);
   }
 
@@ -25,21 +25,13 @@ class Light {
   }
 }
 
-
 class TrafficLight extends HTMLElement {
   constructor() {
     super();
 
-    const shadow = this.attachShadow({mode: 'open'});
-
-    const html = document.createElement('div');
-    html.className = 'ampel';
-
-    this.redlight = new Light('red', html);
-    this.yellowlight = new Light('yellow', html);
-    this.greenlight = new Light('green', html);
-
-    const style = document.createElement('style');
+    const shadow = this.attachShadow({ mode: "open" });
+    const lightBox = document.createElement("div");
+    const style = document.createElement("style");
 
     // TODO: Move light style to lights
     style.textContent = `
@@ -60,80 +52,147 @@ class TrafficLight extends HTMLElement {
       margin-bottom: 5px;
     }
     `;
+    lightBox.className = "ampel";
 
-    shadow.append(style, html);
-  }
+    this.redlight = new Light("red", lightBox);
+    this.yellowlight = new Light("yellow", lightBox);
+    this.greenlight = new Light("green", lightBox);
 
-  // TODO: Remove, not necessary right now
-  connectedCallback() {
-    this.onclick = this.run;
-  }
+    shadow.append(style, lightBox);
 
-  run() {
-    // TODO: Should not force switch states!
-    this.enterRedState();
+    this.state = "OFF";
+    this.busy = false;
+    this.timeoutID;
+    this.timeout = 2000;
   }
 
   // If in RED state, switches to redYellow state
   // and then after timeYellow to green state.
   switchToGreen() {
-
+    this.advanceStatemachine("switchToGreen");
   }
 
   // If in GREEN state, switches to Yellow state
   // and then after timeYellow to green state.
   switchToRed() {
+    this.advanceStatemachine("switchToRed");
+  }
 
+  enable() {
+    this.advanceStatemachine("enable");
+  }
+
+  disable() {
+    this.advanceStatemachine("disable");
   }
 
   // This state machine controls the trafic light colour changes
   advanceStatemachine(event) {
+    /* Inputs: switchToGreen, switchToRed, timerDone, enable, disable
+     * Outputs: redlight on/off, yellowlight on/off, greenlight on/off, timerTrigger, busy, enable
+     * States: OFF, RED, REDYELLOW, GREEN, YELLOW
+     */
 
-    // Handle the outputs (lights on and off) based on the state after
-    // the transition
-    
-    // Outputs: redlight on/off, yellowlight on/off, greenlight on/off, timerTrigger, busy, enable
+    let oldSate = this.state;
 
-    // States: OFF, RED, REDYELLOW, GREEN, YELLOW,
+    /* Handle the state transitions based on the input event and the current state */
+    if (event === "disable") {
+      this.state = "OFF";
+    } else {
+      switch (this.state) {
+        case "RED":
+          if (event === "switchToGreen") {
+            this.state = "REDYELLOW";
+          }
+          break;
 
-    // Handle the state transitions based on the input event and the current state
-    // Inputs: switchToGreen, switchToRed, timerDone, enable, disable
+        case "REDYELLOW":
+          if (event === "timerDone") {
+            this.state = "GREEN";
+          }
+          break;
 
+        case "GREEN":
+          if (event === "switchToRed") {
+            this.state = "YELLOW";
+          }
+          break;
+
+        case "YELLOW":
+          if (event === "timerDone") {
+            this.state = "RED";
+          }
+          break;
+
+        case "OFF":
+          if (event === "enable") {
+            this.state = "RED";
+          }
+          break;
+
+        default:
+          break;
+      }
+    }
+
+    if (oldSate !== this.state)
+      /* Handle the outputs (lights on and off) based on the state after the transition */
+      switch (this.state) {
+        case "RED":
+          this.redlight.on();
+          this.yellowlight.off();
+          this.greenlight.off();
+          this.busy = false;
+          break;
+
+        case "REDYELLOW":
+          this.redlight.on();
+          this.yellowlight.on();
+          this.greenlight.off();
+          this.busy = true;
+          this.timeoutID = setTimeout(
+            this.timerCallback.bind(this),
+            this.timeout
+          );
+          break;
+
+        case "GREEN":
+          this.redlight.off();
+          this.yellowlight.off();
+          this.greenlight.on();
+          this.busy = false;
+          break;
+
+        case "YELLOW":
+          this.redlight.off();
+          this.yellowlight.on();
+          this.greenlight.off();
+          this.busy = true;
+          this.timeoutID = setTimeout(
+            this.timerCallback.bind(this),
+            this.timeout
+          );
+          break;
+
+        case "OFF":
+          this.redlight.off();
+          this.yellowlight.off();
+          this.greenlight.off();
+          this.busy = false;
+          break;
+
+        default:
+          break;
+      }
   }
 
-
-  enterRedState() {
-    this.redlight.on();
-    this.yellowlight.off();
-    this.greenlight.off();
-
-    setTimeout(this.enterRedYellowState.bind(this), 5000);
-  }
-
-  enterRedYellowState() {
-    this.redlight.on();
-    this.yellowlight.on();
-    this.greenlight.off();
-
-    setTimeout(this.enterGreenState.bind(this), 2000);
-  }
-  enterGreenState() {
-    this.redlight.off();
-    this.yellowlight.off();
-    this.greenlight.on();
-
-    setTimeout(this.enterYellowState.bind(this), 5000);
-  }
-  enterYellowState() {
-    this.redlight.off();
-    this.yellowlight.on();
-    this.greenlight.off();
-
-    setTimeout(this.enterRedState.bind(this), 2000);
+  timerCallback() {
+    this.advanceStatemachine("timerDone");
   }
 }
 
-customElements.define('traffic-light', TrafficLight);
+customElements.define("traffic-light", TrafficLight);
 
-// let trafficLight1 = new TrafficLight("")
+let trafficLight1 = document.createElement("traffic-light");
+document.body.append(trafficLight1);
 // trafficLight1.run()
