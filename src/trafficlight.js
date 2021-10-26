@@ -1,3 +1,5 @@
+// @ts-check
+
 class Light {
   constructor(colour, parent) {
     this.offColour = "gray";
@@ -25,7 +27,7 @@ class Light {
   }
 }
 
-class TrafficLight extends HTMLElement {
+export class TrafficLight extends HTMLElement {
   constructor() {
     super();
 
@@ -49,7 +51,7 @@ class TrafficLight extends HTMLElement {
       flex-direction: column;
       background-color: black;
       width: fit-content;
-      margin-bottom: 5px;
+      margin: 5px;
     }
     `;
     lightBox.className = "ampel";
@@ -135,6 +137,7 @@ class TrafficLight extends HTMLElement {
       }
     }
 
+    // Only process outputs on state change.
     if (oldSate !== this.state)
       /* Handle the outputs (lights on and off) based on the state after the transition */
       switch (this.state) {
@@ -193,6 +196,3 @@ class TrafficLight extends HTMLElement {
 
 customElements.define("traffic-light", TrafficLight);
 
-let trafficLight1 = document.createElement("traffic-light");
-document.body.append(trafficLight1);
-// trafficLight1.run()
