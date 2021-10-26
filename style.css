@@ -24,5 +24,7 @@ h1 {
 }
 
 #container {
+  margin-top: 1em;
+  margin-bottom: 1em;
   display: flex
 }
