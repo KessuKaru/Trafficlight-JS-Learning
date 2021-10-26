@@ -1,0 +1,28 @@
+h1 {
+  font-family: monospace;
+}
+
+.light {
+  height: 50px;
+  width: 50px;
+  background-color: gray;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 5px;
+}
+
+/* .light#redlight {
+    background-color: red;
+  } */
+
+.ampel {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  width: fit-content;
+  margin: 5px;
+}
+
+#container {
+  display: flex
+}
