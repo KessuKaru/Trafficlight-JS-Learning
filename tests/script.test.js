@@ -1,9 +1,8 @@
-describe("A suite is just a function", function() {
+describe("A useless testsuite", function() {
     var a;
   
-    it("and so is a spec", function() {
+    it("A true spec :D", function() {
       a = true;
-  
       expect(a).toBe(true);
     });
   });
