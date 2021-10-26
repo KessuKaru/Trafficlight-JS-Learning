@@ -20,5 +20,9 @@ h1 {
   flex-direction: column;
   background-color: black;
   width: fit-content;
-  margin-bottom: 5px;
+  margin: 5px;
+}
+
+#container {
+  display: flex
 }
